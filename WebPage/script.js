@@ -1,17 +1,24 @@
-const para = document.querySelector('p');
+document.onmousemove = move;
+window.onresize = resize;
 
-      para.addEventListener('click', updateName);
+var pageWidth = document.documentElement.scrollWidth
+var pageHeight = document.documentElement.scrollHeight
 
-      function updateName() {
-        const name = prompt('Enter a new name');
-        para.textContent = `Player 1: ${name}`;
-        
-        // 1. Создаём новый объект XMLHttpRequest
-	var xhr = new XMLHttpRequest();
-
-	// 2. Конфигурируем его: GET-запрос на URL 'phones.json'
-	xhr.open('LOL', 'phones.json', false);
-
-	// 3. Отсылаем запрос
-	xhr.send();
-      }
+//обработка изменения размера окна
+function resize(event) {
+	console.log(pageWidth+':'+pageHeight)
+}
+//вращение фона при перемещении мыши
+function move (event) {
+	let x = event.clientX - pageWidth / 2;
+	let y = pageHeight / 2 - event.clientY;
+	var deg = 0 - (180 / Math.PI ) * Math.acos(x/Math.sqrt(x*x+y*y));
+	console.log(x + ':' + y + ' deg:' + deg);
+	
+	if(y<0){
+		deg = -deg;
+	}
+	
+	let all_doc = document.getElementById('all_doc');
+	all_doc.style.backgroundImage = 'linear-gradient(' +deg +'deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)';
+}
