@@ -1,19 +1,21 @@
 document.onmousemove = move;
 window.onresize = resize;
 
-var pageWidth = document.documentElement.scrollWidth
-var pageHeight = document.documentElement.scrollHeight
+var pageWidth = document.documentElement.clientWidth
+var pageHeight = document.documentElement.clientHeight
 
 //обработка изменения размера окна
 function resize(event) {
-	console.log(pageWidth+':'+pageHeight)
+pageWidth = document.documentElement.clientWidth
+pageHeight = document.documentElement.clientHeight
+//console.log(pageWidth+':'+pageHeight)
 }
 //вращение фона при перемещении мыши
 function move (event) {
 	let x = event.clientX - pageWidth / 2;
 	let y = pageHeight / 2 - event.clientY;
 	var deg = 0 - (180 / Math.PI ) * Math.acos(x/Math.sqrt(x*x+y*y));
-	console.log(x + ':' + y + ' deg:' + deg);
+	//console.log(x + ':' + y + ' deg:' + deg);
 	
 	if(y<0){
 		deg = -deg;
