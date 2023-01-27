@@ -3,58 +3,100 @@
 #include <fstream>
 #include <filesystem>
 #include <string>
+#include <string_view>
 
-//посылка страницы
-void SendFile(int descriptor, const std::string& file_name){
-using namespace std::literals;
-using std::filesystem::path;
-	path p = path("..") / path("WebPage") / path(file_name);
-	std::ifstream file(p, std::ios::in | std::ios::binary);
-	if(!file.is_open()){
-		std::cout<<"error read file "<<p<<std::endl;
-		std::cout<<"file |"<<file_name<<"|"<<std::endl;
-		return;
-	}
+namespace request{
+	//посылка страницы
+	void SendFile(int descriptor, std::string_view file_name){
+	using namespace std::literals;
+	using std::filesystem::path;
 	
-	std::string html_ok = "HTTP/1.1 200 OK\n\n"s;
-	send (descriptor, html_ok.data(),html_ok.size(), MSG_NOSIGNAL); 
-	std::cout<<html_ok;
-	
-	char buffer[1024];
-	int parts = 0;
-	do {
-		file.read(buffer, sizeof(buffer));
+		path p = path("..") / path("WebPage") / path(file_name);
+		std::ifstream file(p, std::ios::in | std::ios::binary);
+		if(!file.is_open()){
+			std::cout<<"error read file "s<< p <<std::endl;
+			std::cout<<"file |"s<< file_name <<"|"s<<std::endl;
+			return;
+		}
 		
-			//вывод буффера в консоль
-			std::cout<<"Send "<<parts++<<" part"<<std::endl;
-			for(int i = 0; i < file.gcount(); ++i){
-				std::cout<<buffer[i];
-			}
-			std::cout<<std::endl;
+		std::string html_ok = "HTTP/1.1 200 OK\n\n"s;
+		send (descriptor, html_ok.data(),html_ok.size(), MSG_NOSIGNAL); 
+		std::cout<<html_ok;
+		
+		char buffer[1024];
+		int parts = 0;
+		do {
+			file.read(buffer, sizeof(buffer));
 			
-		//отправка ответа
-		send (descriptor, buffer,file.gcount(), MSG_NOSIGNAL); 
+				//вывод буффера в консоль
+				std::cout<<"Send "<<parts++<<" part"<<std::endl;
+				for(int i = 0; i < file.gcount(); ++i){
+					std::cout<<buffer[i];
+				}
+				std::cout<<std::endl;
+				
+			//отправка ответа
+			send (descriptor, buffer,file.gcount(), MSG_NOSIGNAL); 
+			
+		} while (file);
 		
-	} while (file);
-	
-	file.close();  
-}
+		file.close();  
+	};
 
-//ответ на запрос
-void Answer(int descriptor, unsigned char* packet_data){
-using namespace std::literals;
-	std::string name;
-	int pos=5;
-	char temp=packet_data[pos];
-	while (temp!=' '){
-		name+=temp;
-		temp=packet_data[++pos];
+	enum RequestType{
+		GET,
+		POST,
+		HEAD,
+		OPTIONS,
+		UNNOUN
+	};
+
+	//Размер слова до пробела
+	std::string_view GetWord (const int first, const char* packet_data){
+		int pos=first;
+		char temp = packet_data[pos];
+		int elements=0;
+		while (temp!=' '){
+			++elements;
+			temp=packet_data[++pos];
+		}
+	return std::string_view(packet_data+first,elements);
+	};
+	
+	RequestType GetType(std::string_view type){
+	using namespace std::literals;
+		if(type=="GET"sv){
+			return RequestType::GET;
+		}else if(type=="GET"sv){
+			return RequestType::GET;
+		}else if(type=="POST"sv){
+			return RequestType::POST;
+		}else if(type=="HEAD"sv){
+			return RequestType::HEAD;
+		}else if(type=="OPTIONS"sv){
+			return RequestType::OPTIONS;
+		}
+		return RequestType::UNNOUN;
 	}
-	std::cout<<"FileName "<<name<<std::endl;
-	if(name.empty()){
-		SendFile(descriptor,"site.html"s);
-	}else{
-		SendFile(descriptor,name);
-	}
+
+	//ответ на запрос
+	void Answer (const int descriptor, const char* packet_data){
+	using namespace std::literals;
+		//размер названия запроса
+		std::string_view type = GetWord(0,packet_data);
+		
+		//по запросу GET посылаем запрашиваемый файл
+		if (GetType(type)==GET){
+			//размер имени запрашиваемого файла
+			std::string_view name = GetWord(type.size()+2,packet_data);
+			std::cout<<"FileName "s<<name<<std::endl;
+			
+			if(name.empty()){
+				SendFile(descriptor,"site.html"s);
+			}else{
+				SendFile(descriptor,name);
+			}
+		}
+	};
 }
 

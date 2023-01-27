@@ -16,15 +16,23 @@
 
 static int slave_socket = 0;
 static int master_socket = 0;
+static const int BUFFER_SIZE_ = 1024;
 
 //обработчик прерывания при закрытии программы через ctrl+c
 void term_handler(int i){
-	shutdown(master_socket, SHUT_RDWR);
-	close( master_socket );
-	
+	CloseSocket(master_socket);
+	CloseSocket(slave_socket);
 	printf ("\nTerminating\n");
 	
 	exit(EXIT_SUCCESS);
+}
+
+void ShowData(const char* packet_data, int resived_bytes){
+	std::cout<<"recived "<<resived_bytes<< " bytes"<<std::endl;
+	for(int i = 0; i < resived_bytes-1; ++i){
+		std::cout<<packet_data[i];
+	}
+	std::cout<<std::endl;
 }
 
 int main (){
@@ -37,23 +45,20 @@ using namespace std::literals;
 
 	while ( true )
 	{
+		//возвращает номер дескриптора, под которым зарегистрирован сокет в ОС
 		slave_socket = accept (master_socket, 0, 0 );
 
-		unsigned char packet_data[1024];
-		unsigned int maximum_packet_size = sizeof( packet_data );
+		char packet_data[BUFFER_SIZE_];
 		
-		int resived_bytes =  recv(slave_socket, packet_data, sizeof(packet_data), MSG_NOSIGNAL);
-
-		std::cout<<"recived "<<resived_bytes<< " bytes"<<std::endl;
-		for(int i = 0; i < resived_bytes-1; ++i){
-			std::cout<<packet_data[i];
-		}
-		std::cout<<std::endl;
+		int resived_bytes = recv(slave_socket, packet_data, sizeof(packet_data), MSG_NOSIGNAL);
+		
+		//Вывод полученных данных в stdout
+		ShowData(packet_data,resived_bytes);
 		
 		//Answer
-		Answer(slave_socket,packet_data);
-
-		shutdown(slave_socket, SHUT_RDWR);
-		close( slave_socket );
+		request::Answer(slave_socket,packet_data);
+		
+		//закрываем соединение
+		CloseSocket(slave_socket);
 	}
 }
