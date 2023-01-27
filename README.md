@@ -43,8 +43,8 @@ cmake --build CmakeFiles/.
   3. HTML, CSS, JavaScript 
 
 # Usage
-	0. Build the program following the instructions [above] (#build-using-cmake)
-	1. Run the server program `./serrver` in the `Server/` folder
-	2. Open the website at 127.0.0.1:12345 in the browser
+  0. Build the program following the instructions [above](#build-using-cmake)
+  1. Run the server program `./serrver` in the `Server/` folder
+  2. Open the website at 127.0.0.1:12345 in the browser
 	
 	
