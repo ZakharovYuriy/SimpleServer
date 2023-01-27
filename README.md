@@ -11,14 +11,15 @@ To build this project on linux you need:<br>
 2)Run the command for Debug and Release conf:<br>
 
 ```
-cmake -E chdir Server/ cmake -G "Unix Makefiles" ../ -DCMAKE_BUILD_TYPE:STRING=Release
+mkdir CmakeFiles
+cmake -E chdir CmakeFiles/ cmake -G "Unix Makefiles" ../ -DCMAKE_BUILD_TYPE:STRING=Release
 ```
 3)Build command:<br>
 
 ```
-cmake --build Server/.
+cmake --build CmakeFiles/.
 ```
-4)To **Run** program- go to the debug (cd Debug/) or release (cd Release/) folder and run:<br>
+4)To **Run** program- go to (cd Server/) folder and run:<br>
 
 ```
 ./serrver

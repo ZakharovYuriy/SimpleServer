@@ -6,8 +6,8 @@
 # Описание программы
 Это простой Веб-сервер, принимающий HTTP-запросы от клиентов, обычно веб-браузеров, и выдающий им HTTP-ответы.<br>
 Данный сервер может принимать запросы из локальной сети по адресу 127.0.0.1:12345<br>
-В ответ сервер посылает HTML сраницу и необходимые для ее отображения файлы, находящиеся в каталоге WebPage.<br>
-Для лучшего понимания взаимодействия клиента и сервера - в stdout выводится поступающая и отправляемая информация.
+В ответ на запрос **GET /** сервер посылает HTML сраницу и необходимые для ее отображения файлы, находящиеся в каталоге WebPage.<br>
+Для лучшего понимания взаимодействия клиента и сервера - в stdout выводится поступающая и отправляемая информация.<br>
 
 # Сборка при помощи Cmake
 To build this project on linux you need:<br>
@@ -15,14 +15,15 @@ To build this project on linux you need:<br>
 2)Run the command for Debug and Release conf:<br>
 
 ```
-cmake -E chdir Server/ cmake -G "Unix Makefiles" ../ -DCMAKE_BUILD_TYPE:STRING=Release
+mkdir CmakeFiles
+cmake -E chdir CmakeFiles/ cmake -G "Unix Makefiles" ../ -DCMAKE_BUILD_TYPE:STRING=Release
 ```
 3)Build command:<br>
 
 ```
-cmake --build Server/.
+cmake --build CmakeFiles/.
 ```
-4)To **Run** program- go to the debug (cd Debug/) or release (cd Release/) folder and run:<br>
+4)To **Run** program- go to (cd Server/) folder and run:<br>
 
 ```
 ./serrver
@@ -44,4 +45,6 @@ cmake --build Server/.
   0. Установка и настройкка всех требуемых компонентов в среде разработки длля запуска приложения
   
 # Описание возможностей:
+
+
 
