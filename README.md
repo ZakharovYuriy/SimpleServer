@@ -5,11 +5,19 @@ Read in other languages: [English](README.md), [Русский](README.Russian.m
 
 # Program Description
 It is a simple Web server that accepts HTTP requests from clients, usually web browsers, and gives them HTTP responses.<br>
-This server can accept requests from the local network at 127.0.0.1:12345<br>
 In response to the **GET /** request, the server sends the HTML page and the files necessary for its display, located in the WebPage directory.<br>
 For a better understanding of the interaction between the client and the server, incoming and sent information is displayed in stdout.<br>
 <br>
 The demo page is my brief summary, demonstrating my skills with HTML, CSS and JavaScript.<br>
+
+# Usage
+  0. Build the program by following the instructions [below] (#build-with-cmake)
+  1. Run the server program `./server` in the `Server/` folder
+  - The program can be run with or without parameters
+  - When starting without parameters, the server will start at the address `127.0.0.1:12345`
+  - When starting, you can specify your own address and port to open the socket
+  - When starting with the `-h` or `-help` parameter, help about the program startup parameters will be displayed
+  2. Open the website in the browser at the address you entered or the standard address `127.0.0.1:12345`
 
 # Build using Cmake
 To build this project on linux you need:<br>
@@ -42,9 +50,5 @@ cmake --build CmakeFiles/.
   2. HTTP запросы
   3. HTML, CSS, JavaScript 
 
-# Usage
-  0. Build the program following the instructions [above](#build-using-cmake)
-  1. Run the server program `./serrver` in the `Server/` folder
-  2. Open the website at 127.0.0.1:12345 in the browser
 	
 	
