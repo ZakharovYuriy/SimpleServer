@@ -11,7 +11,7 @@ For a better understanding of the interaction between the client and the server,
 The demo page is my brief summary, demonstrating my skills with HTML, CSS and JavaScript.<br>
 
 # Usage
-  0. Build the program by following the instructions [below] (#build-with-cmake)
+  0. Build the program by following the instructions [below](#build-using-cmake)
   1. Run the server program `./server` in the `Server/` folder
   - The program can be run with or without parameters
   - When starting without parameters, the server will start at the address `127.0.0.1:12345`
