@@ -16,38 +16,38 @@ header {
 #block1{
 	/*border: 5px solid blue;*/
 	display: flex;
-	margin: auto auto;
-	padding: auto;
+	margin: 130px auto 0px auto;
 }
 
 #name {
 	/*font-family:'Merriweather', serif;*/
-	font-family: 'Titan One', cursive;
+	font-family: font-family: 'Prata', serif;/*'Titan One', cursive;*/
 	color: white;
-	font-size: 40px;
+	font-size: 50px;
 	margin:auto auto auto -15px;
 	white-space: pre;
-	text-shadow: 0px 2px 12px black;
+	/*text-shadow: 0px 2px 12px black;*/
 }
 
 #avatar {
-	height:300px;
+	height:450px;
 	/* up right down left*/
-	margin:0px -20px -50px -60px;
+	margin:0px -20px -50px -100px;
 }
 
 
 article{
 	/*border: 5px solid black;*/
 	color: white;
-	font-size: 20px;
+	font-size: 23px;
 	display: inline;
+	font-family: 'Prata', serif;
 	
 }
 
 p , ul{
-	/border: 5px solid black;
-	text-shadow: 0px 0px 15px black;
+	/*border: 5px solid black;*/
+	/*text-shadow: 0px 0px 15px black;*/
 }
 
 article p{
@@ -56,6 +56,7 @@ article p{
 
 #about_me p{
 	/* up right down left*/
-	margin:500px auto 500px auto;
+	margin:700px auto 700px auto;
 }
+
 
