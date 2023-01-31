@@ -77,8 +77,8 @@ int PORT=12345;
 			exit(EXIT_SUCCESS);
 		} else {
 			try{
-				ParceIP(mode);
-				ParcePort(mode);
+				IP = ParceIP(mode);
+				PORT = ParcePort(mode);
 			}
 			catch(...){
 				std::cout<<"error_wrong IP"<<std::endl;
