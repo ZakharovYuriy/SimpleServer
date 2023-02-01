@@ -69,8 +69,15 @@ window.addEventListener('scroll', function() {
 
 });
 
+let call_mython = document.getElementById('Call_Mython');
 
+if (call_mython){
+call_mython.onclick = CallMython;}
 
+function CallMython (event) {
+	console.log("CallMython");
+	window.open("./pages/mython.html");
+}
 
 
 

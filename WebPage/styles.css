@@ -45,13 +45,20 @@ article{
 	
 }
 
+article p{
+	text-align:center
+}
+
+.wrapper {
+  display: grid;
+  text-align:center;
+  grid-template-columns: auto auto auto;
+  margin:auto auto;
+}
+
 p , ul{
 	/*border: 5px solid black;*/
 	/*text-shadow: 0px 0px 15px black;*/
-}
-
-article p{
-	text-align:center
 }
 
 #about_me p{

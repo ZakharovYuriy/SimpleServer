@@ -1,0 +1,62 @@
+#Mython{
+	/*border: 5px solid blue;*/
+	display: flex;
+	/* up right down left*/
+	margin: 10px auto 10px auto;
+}
+
+#code_block_section{
+	/*border: 5px solid blue;*/
+	display:  grid;
+	/* up right down left*/
+	margin: 0px 20px 10px 20px;
+}
+
+#code_block, #answer_block{
+	min-height: 150px;
+	min-width: 200px;
+	width: 80vw;
+	
+	color: white;
+	resize: none;
+}
+
+#code_block{
+	/*border: 5px solid green;*/
+	height: 40vh;
+	background-color: #344756;	
+	/* up right down left*/
+	margin: 10px auto auto auto;
+}
+
+#answer_block{
+	/*border: 5px solid green;*/
+	height: 20vh;
+	background-color:#0A1F32;/* #2D384A;*/
+	/* up right down left*/
+	margin: 10px auto auto auto;
+}
+
+#button_send{ 
+	background-image: linear-gradient(90deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);
+    display: inline-block;
+    vertical-align: middle;
+    
+	border: 0;
+	box-shadow: none;
+	border-radius: 5px;
+}
+
+svg {
+    display: inline-block;
+    vertical-align: middle;
+    width: 20px;
+    height: 20px;
+    margin-right: 0.25rem;
+    filter: drop-shadow(0px 0px 1px black);
+}
+
+#button_section { 
+	position: absolute;
+	right: 12vw;
+}
