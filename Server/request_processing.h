@@ -6,23 +6,45 @@
 #include <string_view>
 
 namespace request{
+	void HtmlOk (int descriptor){
+		std::string html_ans = "HTTP/1.1 200 OK\n\n"s;
+		send (descriptor, html_ans.data(),html_ans.size(), MSG_NOSIGNAL); 
+		std::cout<<html_ans<<std::endl;
+	}
+	
+	void HtmlErr (int descriptor){
+		std::string html_ans = "HTTP/1.1 404\n\n"s;
+		send (descriptor, html_ans.data(),html_ans.size(), MSG_NOSIGNAL); 
+		std::cout<<html_ans<<std::endl;
+	}
+	
+	void HtmlOk (int descriptor,std::ifstream& file){
+		std::string html_ok = "HTTP/1.1 200 OK\n"s;
+		const auto fsize = file.tellg();
+		file.seekg(0L, std::ios_base::beg);
+		
+		html_ok += "Content-Length:" + std::to_string(fsize) + "\n\n";
+		send (descriptor, html_ok.data(),html_ok.size(), MSG_NOSIGNAL); 
+		std::cout<<html_ok<<std::endl;
+	}
+
 	//посылка страницы
 	void SendFile(int descriptor, std::string_view file_name){
 	using namespace std::literals;
 	using std::filesystem::path;
 	
 		path p = path("..") / path("WebPage") / path(file_name);
-		std::ifstream file(p, std::ios::in | std::ios::binary);
+		std::ifstream file(p, std::ios::in | std::ios::ate | std::ios::binary);
 		if(!file.is_open()){
 			std::cout<<"error read file "s<< p <<std::endl;
 			std::cout<<"file |"s<< file_name <<"|"s<<std::endl;
+			
+			HtmlErr(descriptor);			
 			return;
 		}
 		
-		std::string html_ok = "HTTP/1.1 200 OK\n\n"s;
-		send (descriptor, html_ok.data(),html_ok.size(), MSG_NOSIGNAL); 
-		std::cout<<html_ok;
-		
+		HtmlOk(descriptor,file);
+	
 		char buffer[1024];
 		int parts = 0;
 		do {
@@ -96,6 +118,15 @@ namespace request{
 			}else{
 				SendFile(descriptor,name);
 			}
+		}
+		
+		//по запросу GET посылаем запрашиваемый файл
+		if (GetType(type)==POST){
+			//размер имени запрашиваемого файла
+			std::string_view name = GetWord(type.size()+2,packet_data);
+			std::cout<<"FileName "s<<name<<std::endl;
+			
+			HtmlOk(descriptor);
 		}
 	};
 }
