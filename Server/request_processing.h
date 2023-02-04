@@ -8,12 +8,16 @@
 class Request{
 public:
 	Request() = delete;
-	Request(int descriptor):descriptor_{descriptor}{};
+	Request(int descriptor,const char* packet_data,int resived_bytes):descriptor_(descriptor),
+	packet_data_(packet_data),resived_bytes_(resived_bytes) {};
 		//ответ на запрос
-	void Answer (const char* packet_data);
+	void Answer ();
 
 private:
 const int descriptor_;
+const char* packet_data_ = nullptr;
+int resived_bytes_ = 0;
+
 
 	void HtmlOk ();
 	void HtmlErr ();
@@ -31,10 +35,11 @@ const int descriptor_;
 	};
 
 	//Размер слова до пробела
-	std::string_view GetWord (const int first, const char* packet_data);
+	std::string_view GetWord (const int first);
 	RequestType GetType(std::string_view type);
+	std::string GetPostText();
 	
-	void PocessingGET(const char* packet_data, std::string_view type);
-	void PocessingPOST(const char* packet_data, std::string_view type);
+	void PocessingGET(std::string_view type);
+	void PocessingPOST(std::string_view type);
 };
 

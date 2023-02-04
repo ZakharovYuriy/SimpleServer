@@ -11,7 +11,9 @@
 #include <iostream>
 
 #include "request_processing.h"
+#include "program_exec.h"
 
+using namespace std;
 using namespace std::literals;
 using std::filesystem::path;
 
@@ -68,15 +70,15 @@ void Request::SendFile(std::string_view file_name){
 
 
 //Размер слова до пробела
-std::string_view Request::GetWord (const int first, const char* packet_data){
+std::string_view Request::GetWord (const int first){
 	int pos=first;
-	char temp = packet_data[pos];
+	char temp = packet_data_[pos];
 	int elements=0;
-	while (temp!=' '){
+	while (temp!=' ' && pos<resived_bytes_){
 		++elements;
-		temp=packet_data[++pos];
+		temp=packet_data_[++pos];
 	}
-return std::string_view(packet_data+first,elements);
+return std::string_view(packet_data_+first,elements);
 };
 
 Request::RequestType Request::GetType(std::string_view type){
@@ -94,9 +96,9 @@ Request::RequestType Request::GetType(std::string_view type){
 	return RequestType::UNNOUN;
 }
 
-void Request::PocessingGET(const char* packet_data, std::string_view type){
+void Request::PocessingGET(std::string_view type){
 	//размер имени запрашиваемого файла
-	std::string_view name = GetWord(type.size()+2,packet_data);
+	std::string_view name = GetWord(type.size()+2);
 	std::cout<<"FileName "s<<name<<std::endl;
 	if(name.empty()){
 		SendFile("site.html"s);
@@ -105,24 +107,70 @@ void Request::PocessingGET(const char* packet_data, std::string_view type){
 	}
 }
 
-void Request::PocessingPOST(const char* packet_data, std::string_view type){
+string Request::GetPostText(){
+	bool got_it = false;
+	int pos=0;
+	int i=0;
+	while(i<resived_bytes_){
+		if(packet_data_[i]=='\n'){
+			if(got_it){
+				pos=i;
+				break;
+			}
+			got_it=true;
+		}else if(packet_data_[i]>32){
+			got_it=false;
+		}
+		++i;
+	}
+	string result="";
+	while(++pos<resived_bytes_){
+		result+=packet_data_[pos];
+	}
+	return result;
+}
+
+void Request::PocessingPOST(std::string_view type){
 	//размер имени запрашиваемого файла
-	std::string_view name = GetWord(type.size()+2,packet_data);
-	std::cout<<"FileName "s<<name<<std::endl;
-	HtmlOk();
+	std::string_view file_name = GetWord(type.size()+2);
+	std::cout<<"FileName "s<<file_name<<std::endl;
+	if(file_name.empty()){
+		HtmlErr();
+	}else{
+		//open executable file
+		path execf = path("..") / path("WebPage") / path("programs") / path(file_name);
+		string answer = ExecFile(execf, GetPostText());
+		//open result file
+		path resf = path("..") / path("WebPage") / path("programs") / path("answers") / path(file_name);
+		std::ofstream result(resf, std::ios::out | std::ios::trunc);
+		if(!result.is_open()){
+			std::cout<<"error open file "s<< resf <<std::endl;
+			std::cout<<"file |"s<< file_name <<"|"s<<std::endl;
+			HtmlErr();			
+			return;
+		}
+		answer+='\n';
+		while(answer.size()<8)
+		{
+			answer+=" ";
+		}
+		result<<answer;
+		result.close();
+		HtmlOk();
+	}
 }
 
 //ответ на запрос
-void Request::Answer (const char* packet_data){
+void Request::Answer (){
 	//размер названия запроса
-	std::string_view type = GetWord(0,packet_data);
+	std::string_view type = GetWord(0);
 	//по запросу GET посылаем запрашиваемый файл
 	if (GetType(type)==GET){
-		PocessingGET(packet_data,type);
+		PocessingGET(type);
 	}
 	//по запросу GET посылаем запрашиваемый файл
 	if (GetType(type)==POST){
-		PocessingPOST(packet_data,type);
+		PocessingPOST(type);
 	}
 };
 

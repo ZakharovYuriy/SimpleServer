@@ -19,20 +19,18 @@ function out (event) {
 var xhr1 = new XMLHttpRequest();
 var xhr2 = new XMLHttpRequest();
 function click (event) {
-	console.log("click");
-	
-		xhr1.open("POST", 'Mython', true);
+	//console.log("click");
+		xhr1.open("POST", '/mython', true);
 		xhr1.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 		var body = document.getElementById('code_block').value;
 		xhr1.onloadend = state;
 		xhr1.send(body);
-		
-		console.log(body);		
+		//console.log(body);		
 }
 
 function state (event) {
 	console.log("ready");
-	xhr2.open("GET", 'text.txt', true);
+	xhr2.open("GET", '/programs/answers/mython', true);
 	xhr2.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 	xhr2.send();
 }
@@ -43,7 +41,7 @@ xhr2.onprogress = function(event) { // запускается периодиче
   // event.total - количество байт всего (только если lengthComputable равно true)
   console.log(`Загружено ${event.loaded} из ${event.total}`);
   if(event.loaded==event.total){
-	  //console.log(xhr.responseText);
-	  document.getElementById('answer_block').value += xhr2.responseText;
+	  //console.log(xhr2.responseText);
+	  document.getElementById('answer_block').value =xhr2.responseText;
 	}
 };

@@ -55,8 +55,8 @@ using namespace std::literals;
 		ur.ShowData(packet_data,resived_bytes);
 		
 		//Answer
-		Request request(slave_socket);
-		request.Answer(packet_data);
+		Request request(slave_socket,packet_data,resived_bytes);
+		request.Answer();
 		
 		//закрываем соединение
 		CloseSocket(slave_socket);
