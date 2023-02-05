@@ -70,14 +70,26 @@ window.addEventListener('scroll', function() {
 });
 
 let call_mython = document.getElementById('Call_Mython');
-
-if (call_mython){
-call_mython.onclick = CallMython;}
-
+if(call_mython){
+	call_mython.onclick = CallMython;
+}
 function CallMython (event) {
 	console.log("CallMython");
 	window.open("./pages/mython.html");
 }
 
+
+let bShow = document.querySelectorAll('button');
+for (let i = 0; i < bShow.length; i++) {
+  bShow[i].onmouseover = over;
+  bShow[i].onmouseout = out;
+}
+function over (event) {
+	this.style.backgroundImage = 'linear-gradient(270deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)';
+}
+function out (event) {
+	//console.log("out");
+	this.style.backgroundImage = 'linear-gradient(90deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)';
+}
 
 
